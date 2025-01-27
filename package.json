@@ -47,5 +47,143 @@
     },
     "peerDependencies": {
         "@elizaos/core": "workspace:*"
+    },
+    "agentConfig": {
+        "pluginType": "elizaos:client:1.0.0",
+        "pluginParameters": {
+            "properties": {
+                "AKASH_MNEMONIC": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Wallet mnemonic is required",
+                    "pattern": "^(\\w+\\s+){11,23}\\w+$"
+                },
+                "AKASH_WALLET_ADDRESS": {
+                    "type": "string",
+                    "pattern": "^akash[a-zA-Z0-9]{39}$",
+                    "description": "Optional Akash wallet address",
+                    "optional": true
+                },
+                "AKASH_NET": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Network configuration URL is required"
+                },
+                "AKASH_VERSION": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Akash version is required"
+                },
+                "AKASH_CHAIN_ID": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Chain ID is required"
+                },
+                "AKASH_NODE": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Node URL is required"
+                },
+                "RPC_ENDPOINT": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "RPC endpoint is required"
+                },
+                "AKASH_GAS_PRICES": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Gas prices are required"
+                },
+                "AKASH_GAS_ADJUSTMENT": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Gas adjustment is required"
+                },
+                "AKASH_KEYRING_BACKEND": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Keyring backend is required"
+                },
+                "AKASH_FROM": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Key name is required"
+                },
+                "AKASH_FEES": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Transaction fees are required"
+                },
+                "AKASH_DEPOSIT": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Deposit is required (generally around 500000uakt)"
+                },
+                "AKASH_PRICING_API_URL": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_DEFAULT_CPU": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_DEFAULT_MEMORY": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_DEFAULT_STORAGE": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_SDL": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_CLOSE_DEP": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_CLOSE_DSEQ": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_PROVIDER_INFO": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_DEP_STATUS": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_DEP_DSEQ": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_GAS_OPERATION": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_GAS_DSEQ": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_MANIFEST_MODE": {
+                    "type": "string",
+                    "enum": ["auto", "manual", "validate_only"],
+                    "description": "Must be one of: auto, manual, validate_only",
+                    "optional": true
+                },
+                "AKASH_MANIFEST_PATH": {
+                    "type": "string",
+                    "optional": true
+                },
+                "AKASH_MANIFEST_VALIDATION_LEVEL": {
+                    "type": "string",
+                    "enum": ["strict", "lenient", "none"],
+                    "description": "Must be one of: strict, lenient, none",
+                    "optional": true
+                }
+            }
+        }
     }
 }
