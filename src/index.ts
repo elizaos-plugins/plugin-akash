@@ -1,4 +1,3 @@
-import { Plugin} from "@elizaos/core";
 import { createDeploymentAction } from "./actions/createDeployment";
 import { closeDeploymentAction } from "./actions/closeDeployment";
 import { getProviderInfoAction } from "./actions/getProviderInfo";
@@ -58,7 +57,7 @@ console.log(`│ Actions : ${actions.length.toString().padEnd(24)}  │`);
 console.log(`│ Status  : Loaded & Ready            │`);
 console.log("└─────────────────────────────────────┘\n");
 
-export const akashPlugin: Plugin = {
+export const akashPlugin = {
   name: "akash",
   description: "Akash Network Plugin for deploying and managing cloud compute",
   actions: actions,
