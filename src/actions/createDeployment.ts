@@ -72,34 +72,14 @@ function loadCertificate(path: string): CertificatePem {
     }
 }
 
-const DEFAULT_SDL_PATH = (() => {
-    const currentFileUrl = import.meta.url;
-    // elizaLogger.info("=== Starting SDL Path Resolution in createDeployment ===", {
-    //     currentFileUrl,
-    //     cwd: process.cwd(),
-    //     importMetaUrl: import.meta.url
-    // });
 
-    // Use the utility function from paths.ts instead of manual resolution
-    const sdlPath = getDefaultSDLPath(currentFileUrl);
-
-    // Only log if file doesn't exist
-    if (!fs.existsSync(sdlPath)) {
-        elizaLogger.warn("Default SDL path not found", {
-            sdlPath,
-            exists: false
-        });
-    }
-
-    return sdlPath;
-})();
 
 const validateDeposit = (deposit: string): boolean => {
     const pattern = /^\d+uakt$/;
     return pattern.test(deposit);
 };
 
-const loadSDLFromFile = (filePath: string): string => {
+const loadSDLFromFile = (filePath: string, runtime: IAgentRuntime): string => {
     // elizaLogger.info("=== Loading SDL File ===", {
     //     requestedPath: filePath,
     //     resolvedPath: path.resolve(filePath),
@@ -108,6 +88,33 @@ const loadSDLFromFile = (filePath: string): string => {
     //     exists: fs.existsSync(filePath),
     //     defaultExists: fs.existsSync(DEFAULT_SDL_PATH)
     // });
+    
+    
+    const DEFAULT_SDL_PATH = (() => {
+      const currentFileUrl = import.meta.url;
+      // elizaLogger.info("=== Starting SDL Path Resolution in createDeployment ===", {
+      //     currentFileUrl,
+      //     cwd: process.cwd(),
+      //     importMetaUrl: import.meta.url
+      // });
+
+      // Use the utility function from paths.ts instead of manual resolution
+      const sdlPath = getDefaultSDLPath(currentFileUrl, runtime);
+
+      // Only log if file doesn't exist
+      if (!fs.existsSync(sdlPath)) {
+        elizaLogger.warn("Default SDL path not found", {
+          sdlPath,
+          exists: false,
+        });
+      }
+
+      return sdlPath;
+    })();
+    
+    if(filePath === ""){
+        filePath = DEFAULT_SDL_PATH; 
+    }
 
     try {
         // If path doesn't contain plugin-akash and it's not the default path, adjust it
@@ -1080,9 +1087,9 @@ export const createDeploymentAction: Action = {
             if (params.sdl) {
                 sdlContent = params.sdl;
             } else if (params.sdlFile) {
-                sdlContent = loadSDLFromFile(params.sdlFile);
+                sdlContent = loadSDLFromFile(params.sdlFile, runtime);
             } else {
-                sdlContent = loadSDLFromFile(DEFAULT_SDL_PATH);
+                sdlContent = loadSDLFromFile("", runtime);
             }
 
             if (params.deposit && !validateDeposit(params.deposit)) {
@@ -1176,10 +1183,10 @@ export const createDeploymentAction: Action = {
                 sdlContent = params.sdl;
                 sdlSource = 'direct';
             } else if (params.sdlFile) {
-                sdlContent = loadSDLFromFile(params.sdlFile);
+                sdlContent = loadSDLFromFile(params.sdlFile, runtime);
                 sdlSource = 'file';
             } else {
-                sdlContent = loadSDLFromFile(DEFAULT_SDL_PATH);
+                sdlContent = loadSDLFromFile("", runtime);
                 sdlSource = 'default';
             }
             elizaLogger.debug("SDL content loaded", {

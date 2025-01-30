@@ -21,11 +21,7 @@ interface PricingResponse {
 }
 
 // Get configuration with defaults
-const config = getConfig(process.env.AKASH_ENV);
-const PRICING_API_URL = config.AKASH_PRICING_API_URL;
-const DEFAULT_CPU = parseInt(config.AKASH_DEFAULT_CPU || "1000");
-const DEFAULT_MEMORY = parseInt(config.AKASH_DEFAULT_MEMORY || "1000000000");
-const DEFAULT_STORAGE = parseInt(config.AKASH_DEFAULT_STORAGE || "1000000000");
+
 
 // Custom error class for GPU pricing errors
 class GPUPricingError extends Error {
@@ -99,6 +95,11 @@ export const getGPUPricingAction: Action = {
     ): Promise<boolean> => {
         const actionId = Date.now().toString();
         elizaLogger.info("Starting GPU pricing request", { actionId });
+        const config = getConfig(runtime);
+        const PRICING_API_URL = config.AKASH_PRICING_API_URL;
+        const DEFAULT_CPU = parseInt(config.AKASH_DEFAULT_CPU || "1000");
+        const DEFAULT_MEMORY = parseInt(config.AKASH_DEFAULT_MEMORY || "1000000000");
+        const DEFAULT_STORAGE = parseInt(config.AKASH_DEFAULT_STORAGE || "1000000000");
 
         try {
             const params = message.content as GetGPUPricingContent;

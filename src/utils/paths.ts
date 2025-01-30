@@ -73,14 +73,14 @@ export const getCertificatePath = (importMetaUrl: string) => {
     return certPath;
 };
 
-export const getDefaultSDLPath = (importMetaUrl: string) => {
-    // elizaLogger.info("=== Resolving SDL Path ===");
-    const pluginRoot = getPluginRoot(importMetaUrl);
-    const srcPath = getSrcPath(importMetaUrl);
-    const config = getConfig(process.env.AKASH_ENV);
-    const sdlFileName = config.AKASH_SDL;
-    const sdlPath = path.join(srcPath, 'sdl', sdlFileName);
-    // const sdlDir = path.dirname(sdlPath);
+export const getDefaultSDLPath = (importMetaUrl: string, runtime: IAgentRuntime) => {
+  // elizaLogger.info("=== Resolving SDL Path ===");
+  const pluginRoot = getPluginRoot(importMetaUrl);
+  const srcPath = getSrcPath(importMetaUrl);
+  const config = getConfig(runtime);
+  const sdlFileName = config.AKASH_SDL;
+  const sdlPath = path.join(srcPath, "sdl", sdlFileName);
+  // const sdlDir = path.dirname(sdlPath);
 
     // Only log if file doesn't exist as a warning
     if (!existsSync(sdlPath)) {
