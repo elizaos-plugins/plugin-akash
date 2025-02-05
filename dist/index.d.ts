@@ -1,8 +1,5 @@
-declare const akashPlugin: {
-    name: string;
-    description: string;
-    actions: any[];
-    evaluators: never[];
-};
+import { Plugin } from '@elizaos/core';
+
+declare const akashPlugin: Plugin;
 
 export { akashPlugin, akashPlugin as default };
