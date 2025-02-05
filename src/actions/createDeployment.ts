@@ -1,5 +1,5 @@
-import { Action, elizaLogger } from "@elizaos/core";
-import { IAgentRuntime, Memory, State, HandlerCallback, Content, ActionExample } from "@elizaos/core";
+import { type Action, elizaLogger } from "@elizaos/core";
+import type { IAgentRuntime, Memory, State, HandlerCallback, Content, ActionExample } from "@elizaos/core";
 import { MsgCreateDeployment } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
 import { QueryClientImpl as QueryProviderClient, QueryProviderRequest } from "@akashnetwork/akash-api/akash/provider/v1beta3";
 import { QueryBidsRequest, QueryClientImpl as QueryMarketClient, MsgCreateLease, BidID } from "@akashnetwork/akash-api/akash/market/v1beta4";
@@ -7,14 +7,14 @@ import * as cert from "@akashnetwork/akashjs/build/certificates";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc";
 import { SDL } from "@akashnetwork/akashjs/build/sdl";
 import { getAkashTypeRegistry } from "@akashnetwork/akashjs/build/stargate";
-import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certificate-manager/CertificateManager";
+import type { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certificate-manager/CertificateManager";
 import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { validateAkashConfig } from "../environment";
 import { AkashError, AkashErrorCode, withRetry } from "../error/error";
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { getCertificatePath, getDefaultSDLPath } from "../utils/paths";
 // import { fileURLToPath } from 'url';
 import { inspectRuntime, isPluginLoaded } from "../runtime_inspect";
@@ -72,14 +72,34 @@ function loadCertificate(path: string): CertificatePem {
     }
 }
 
+const DEFAULT_SDL_PATH = (() => {
+    const currentFileUrl = import.meta.url;
+    // elizaLogger.info("=== Starting SDL Path Resolution in createDeployment ===", {
+    //     currentFileUrl,
+    //     cwd: process.cwd(),
+    //     importMetaUrl: import.meta.url
+    // });
 
+    // Use the utility function from paths.ts instead of manual resolution
+    const sdlPath = getDefaultSDLPath(currentFileUrl);
+
+    // Only log if file doesn't exist
+    if (!fs.existsSync(sdlPath)) {
+        elizaLogger.warn("Default SDL path not found", {
+            sdlPath,
+            exists: false
+        });
+    }
+
+    return sdlPath;
+})();
 
 const validateDeposit = (deposit: string): boolean => {
     const pattern = /^\d+uakt$/;
     return pattern.test(deposit);
 };
 
-const loadSDLFromFile = (filePath: string, runtime: IAgentRuntime): string => {
+const loadSDLFromFile = (filePath: string): string => {
     // elizaLogger.info("=== Loading SDL File ===", {
     //     requestedPath: filePath,
     //     resolvedPath: path.resolve(filePath),
@@ -88,33 +108,6 @@ const loadSDLFromFile = (filePath: string, runtime: IAgentRuntime): string => {
     //     exists: fs.existsSync(filePath),
     //     defaultExists: fs.existsSync(DEFAULT_SDL_PATH)
     // });
-    
-    
-    const DEFAULT_SDL_PATH = (() => {
-      const currentFileUrl = import.meta.url;
-      // elizaLogger.info("=== Starting SDL Path Resolution in createDeployment ===", {
-      //     currentFileUrl,
-      //     cwd: process.cwd(),
-      //     importMetaUrl: import.meta.url
-      // });
-
-      // Use the utility function from paths.ts instead of manual resolution
-      const sdlPath = getDefaultSDLPath(currentFileUrl, runtime);
-
-      // Only log if file doesn't exist
-      if (!fs.existsSync(sdlPath)) {
-        elizaLogger.warn("Default SDL path not found", {
-          sdlPath,
-          exists: false,
-        });
-      }
-
-      return sdlPath;
-    })();
-    
-    if(filePath === ""){
-        filePath = DEFAULT_SDL_PATH; 
-    }
 
     try {
         // If path doesn't contain plugin-akash and it's not the default path, adjust it
@@ -1087,9 +1080,9 @@ export const createDeploymentAction: Action = {
             if (params.sdl) {
                 sdlContent = params.sdl;
             } else if (params.sdlFile) {
-                sdlContent = loadSDLFromFile(params.sdlFile, runtime);
+                sdlContent = loadSDLFromFile(params.sdlFile);
             } else {
-                sdlContent = loadSDLFromFile("", runtime);
+                sdlContent = loadSDLFromFile(DEFAULT_SDL_PATH);
             }
 
             if (params.deposit && !validateDeposit(params.deposit)) {
@@ -1183,10 +1176,10 @@ export const createDeploymentAction: Action = {
                 sdlContent = params.sdl;
                 sdlSource = 'direct';
             } else if (params.sdlFile) {
-                sdlContent = loadSDLFromFile(params.sdlFile, runtime);
+                sdlContent = loadSDLFromFile(params.sdlFile);
                 sdlSource = 'file';
             } else {
-                sdlContent = loadSDLFromFile("", runtime);
+                sdlContent = loadSDLFromFile(DEFAULT_SDL_PATH);
                 sdlSource = 'default';
             }
             elizaLogger.debug("SDL content loaded", {
