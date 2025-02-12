@@ -1,18 +1,27 @@
 
 
-> @elizaos/plugin-akash@0.1.8+build.1 build /Users/a/eliza-wrangler/packages/plugin-akash
+> @elizaos/plugin-akash@0.1.9 build /Users/gdesign/developer-projects/laborales/upstreet/eliza-last/eliza/packages/plugin-akash
 > tsup
 
 [34mCLI[39m Building entry: src/index.ts
 [34mCLI[39m Using tsconfig: tsconfig.json
 [34mCLI[39m tsup v8.3.5
-[34mCLI[39m Using tsup config: /Users/a/eliza-wrangler/packages/plugin-akash/tsup.config.ts
+[34mCLI[39m Using tsup config: /Users/gdesign/developer-projects/laborales/upstreet/eliza-last/eliza/packages/plugin-akash/tsup.config.ts
 [34mCLI[39m Target: esnext
 [34mCLI[39m Cleaning output folder
 [34mESM[39m Build start
 DTS Build start
 [32mESM[39m [1mdist/index.js     [22m[32m5.58 MB[39m
 [32mESM[39m [1mdist/index.js.map [22m[32m5.81 MB[39m
-[32mESM[39m ⚡️ Build success in 447ms
-DTS ⚡️ Build success in 5707ms
-DTS dist/index.d.ts 125.00 B
+[32mESM[39m ⚡️ Build success in 1617ms
+src/index.ts(1,28): error TS7016: Could not find a declaration file for module '@elizaos/core'. '/Users/gdesign/developer-projects/laborales/upstreet/eliza-last/eliza/packages/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/elizaos__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@elizaos/core';`
+
+[31mError: error occurred in dts build
+    at Worker.<anonymous> (/Users/gdesign/developer-projects/laborales/upstreet/eliza-last/eliza/node_modules/tsup/dist/index.js:1541:26)
+    at Worker.emit (node:events:507:28)
+    at MessagePort.<anonymous> (node:internal/worker:267:53)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:827:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)[39m
+DTS Build error
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m
