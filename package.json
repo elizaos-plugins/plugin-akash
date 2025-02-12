@@ -23,7 +23,6 @@
         "@akashnetwork/akashjs": "0.10.1",
         "@cosmjs/proto-signing": "^0.31.3",
         "@cosmjs/stargate": "0.31.3",
-        "@elizaos/core": "workspace:*",
         "@types/js-yaml": "^4.0.9",
         "axios": "^1.7.9",
         "dotenv": "^16.4.1",
